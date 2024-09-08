@@ -9,9 +9,9 @@ jobs:
   build:
     name: 'Build and Push'
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        node: [16, 17, 18]
+    # strategy:
+    #   matrix:
+    #     node: [16, 17, 18]
 
     steps:
       - name: Checkout
@@ -20,7 +20,8 @@ jobs:
       - name: Setup Node | ${{ matrix.node }}
         uses: actions/setup-node@v4
         with:
-          node-version: ${{ matrix.node }}
+          # ${{ matrix.node }}
+          node-version: 18
           cache: 'npm'
       - run: npm install
       - run: npm run test
@@ -37,8 +38,15 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-      - name: Build docker image
-        run: docker build -t vitorshermon/rocketseat-ci-api:${{ steps.generate_tag.outputs.sha }} .
+      - name: Build and push
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          push: true
+          tags: vitorshermon/rocketseat-ci-api:${{ steps.generate_tag.outputs.sha }}, vitorshermon/rocketseat-ci-api:latest
 
-      - name: Push Image
-        run: docker push vitorshermon/rocketseat-ci-api:${{ steps.generate_tag.outputs.sha }}
+      # - name: Build docker image
+      #   run: docker build -t vitorshermon/rocketseat-ci-api:${{ steps.generate_tag.outputs.sha }} .
+
+      # - name: Push Image
+      #   run: docker push vitorshermon/rocketseat-ci-api:${{ steps.generate_tag.outputs.sha }}
