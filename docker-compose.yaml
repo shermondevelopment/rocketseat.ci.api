@@ -17,9 +17,9 @@ services:
       - primeira-network
 
   api-rocket:
+    container_name: api-rocket
     build:
       context: .
-    container_name: api-rocket
     ports:
       - 3001:3000
     depends_on:
@@ -29,6 +29,7 @@ services:
 
 networks:
   primeira-network:
+    name: primeira-network
     driver: bridge
 
 volumes:
