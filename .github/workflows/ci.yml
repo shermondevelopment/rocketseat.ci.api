@@ -64,8 +64,9 @@ jobs:
         env:
           REGISTRY: ${{ steps.login-ecr.outputs.registry }}
           TAG: ${{ steps.generate_tag.outputs.sha }}
-        run: | docker build -t $REGISTRY/shermon-ci-api:$TAG .
-             docker push $REGISTRY/shermon-ci-api:$TAG
+        run: | 
+          docker build -t $REGISTRY/shermon-ci-api:$TAG .
+          docker push $REGISTRY/shermon-ci-api:$TAG
 
       # - name: Push Image
       #   run: docker push vitorshermon/rocketseat-ci-api:${{ steps.generate_tag.outputs.sha }}
