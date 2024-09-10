@@ -45,6 +45,8 @@ jobs:
       - name: Login to AWS ECR
         id: login-ecr
         uses: aws-actions/amazon-ecr-login@v2
+
+
       # - name: Login into container docker registry
       #   uses: docker/login-action@v3
       #   with:
@@ -58,8 +60,12 @@ jobs:
       #     push: true
       #     tags: vitorshermon/rocketseat-ci-api:${{ steps.generate_tag.outputs.sha }}, vitorshermon/rocketseat-ci-api:latest
 
-      # - name: Build docker image
-      #   run: docker build -t vitorshermon/rocketseat-ci-api:${{ steps.generate_tag.outputs.sha }} .
+      - name: Build docker image
+        env:
+          REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+          TAG: ${{ steps.generate_tag.outputs.sha }}
+        run: docker build -t $REGISTRY/shermon-ci-api:$TAG .
+             docker push $REGISTRY/shermon-ci-api:$TAG
 
       # - name: Push Image
       #   run: docker push vitorshermon/rocketseat-ci-api:${{ steps.generate_tag.outputs.sha }}
