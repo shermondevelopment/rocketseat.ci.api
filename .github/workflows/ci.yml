@@ -68,10 +68,13 @@ jobs:
         run: | 
           docker build -t $REGISTRY/shermon-ci-api:$TAG .
           docker push $REGISTRY/shermon-ci-api:$TAG
+          docker tag $REGISTRY/shermon-ci-api:$TAG $REGISTRY/shermon-ci-api:latest
+          docker push $REGISTRY/shermon-ci-api:latest
           IMAGE=$(echo $REGISTRY/shermon-ci-api:$TAG)
           echo "image=$IMAGE" >> $GITHUB_OUTPUT
       
       - name: Deploy to App Runner
+        id: deploy-app-runner
         uses: awslabs/amazon-app-runner-deploy@main
         with:
           service: shermon-api
@@ -81,6 +84,10 @@ jobs:
           cpu: 1
           memory: 2
           port: 3000
+          wait-for-service-stability-seconds: 180
+
+      - name: App runner check
+        run: echo "App runner running... ${{ steps.deploy-app-runner.outputs.service-url }}"
 
       # - name: Push Image
       #   run: docker push vitorshermon/rocketseat-ci-api:${{ steps.generate_tag.outputs.sha }}
