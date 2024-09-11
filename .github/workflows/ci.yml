@@ -68,7 +68,7 @@ jobs:
         run: | 
           docker build -t $REGISTRY/shermon-ci-api:$TAG .
           docker push $REGISTRY/shermon-ci-api:$TAG
-          IMAGE=$(echo $REGISTRY/shermon-ci:$TAG)
+          IMAGE=$(echo $REGISTRY/shermon-ci-api:$TAG)
           echo "image=$IMAGE" >> $GITHUB_OUTPUT
       
       - name: Deploy to App Runner
