@@ -61,12 +61,26 @@ jobs:
       #     tags: vitorshermon/rocketseat-ci-api:${{ steps.generate_tag.outputs.sha }}, vitorshermon/rocketseat-ci-api:latest
 
       - name: Build docker image
+        id: build-docker-image
         env:
           REGISTRY: ${{ steps.login-ecr.outputs.registry }}
           TAG: ${{ steps.generate_tag.outputs.sha }}
         run: | 
           docker build -t $REGISTRY/shermon-ci-api:$TAG .
           docker push $REGISTRY/shermon-ci-api:$TAG
+          IMAGE=$(echo $REGISTRY/shermon-ci:$TAG)
+          echo "image=$IMAGE" >> $GITHUB_OUTPUT
+      
+      - name: Deploy to App Runner
+        uses: awslabs/amazon-app-runner-deploy@main
+        with:
+          service: shermon-api
+          image: ${{ steps.build-docker-image.outputs.image }}
+          access-role-arn: arn:aws:iam::897729119853:role/app-runner-role
+          region: us-east-2
+          cpu: 1
+          memory: 1
+          port: 3000
 
       # - name: Push Image
       #   run: docker push vitorshermon/rocketseat-ci-api:${{ steps.generate_tag.outputs.sha }}
