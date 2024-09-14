@@ -74,9 +74,8 @@ jobs:
           TAG: ${{ steps.generate_tag.outputs.sha }}
         run: | 
           docker build -t $REGISTRY/shermon-ci-api:$TAG .
-          docker push $REGISTRY/shermon-ci-api:$TAG
           docker tag $REGISTRY/shermon-ci-api:$TAG $REGISTRY/shermon-ci-api:latest
-          docker push $REGISTRY/shermon-ci-api:latest
+          docker push --all-tags $REGISTRY/shermon-ci-api
           IMAGE=$(echo $REGISTRY/shermon-ci-api:$TAG)
           echo "image=$IMAGE" >> $GITHUB_OUTPUT
       
