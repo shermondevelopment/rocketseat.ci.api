@@ -1,3 +1,10 @@
+# [1.1.0](https://github.com/shermondevelopment/rocketseat.ci.api/compare/v1.0.0...v1.1.0) (2024-09-14)
+
+
+### Features
+
+* altering ([0505537](https://github.com/shermondevelopment/rocketseat.ci.api/commit/050553704ba3eec39b7a151c73d57c5025003d5e))
+
 # 1.0.0 (2024-09-11)
 
 
